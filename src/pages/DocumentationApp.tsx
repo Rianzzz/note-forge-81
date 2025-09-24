@@ -287,6 +287,21 @@ Bom trabalho! 📝`,
     });
   };
 
+  const handleNewFolder = () => {
+    const newFolder: Folder = {
+      id: Date.now().toString(),
+      name: "Nova Pasta",
+      isExpanded: true,
+    };
+
+    setFolders(prev => [...prev, newFolder]);
+    
+    toast({
+      title: "Nova pasta criada",
+      description: "Pasta criada com sucesso.",
+    });
+  };
+
   const handleToggleFolder = (folderId: string) => {
     setFolders(prev => 
       prev.map(folder => 
@@ -320,6 +335,7 @@ Bom trabalho! 📝`,
           currentDocumentId={currentDocument?.id}
           onDocumentSelect={handleDocumentSelect}
           onNewDocument={handleNewDocument}
+          onNewFolder={handleNewFolder}
           onNewDocumentInFolder={handleNewDocumentInFolder}
           onSearchChange={handleSearchChange}
           onMoveDocument={handleMoveDocument}

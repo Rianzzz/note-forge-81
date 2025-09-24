@@ -2,6 +2,13 @@ import { useState } from "react";
 import { Search, FileText, Plus, Folder, FolderOpen, GripVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { cn } from "@/lib/utils";
 import {
   DndContext,
@@ -39,6 +46,7 @@ interface DocumentSidebarProps {
   currentDocumentId?: string;
   onDocumentSelect: (document: Document) => void;
   onNewDocument: () => void;
+  onNewFolder: () => void;
   onNewDocumentInFolder: (folderId: string) => void;
   onSearchChange: (query: string) => void;
   onMoveDocument: (documentId: string, targetFolderId?: string) => void;
@@ -150,7 +158,7 @@ function DroppableFolder({
           variant="ghost"
           size="sm"
           onClick={() => onNewDocumentInFolder(folder.id)}
-          className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 hover:bg-sidebar-hover"
+          className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 hover:bg-sidebar-hover transition-opacity"
         >
           <Plus className="h-3 w-3" />
         </Button>
@@ -178,6 +186,7 @@ export function DocumentSidebar({
   currentDocumentId,
   onDocumentSelect,
   onNewDocument,
+  onNewFolder,
   onNewDocumentInFolder,
   onSearchChange,
   onMoveDocument,
@@ -247,14 +256,30 @@ export function DocumentSidebar({
         <div className="p-4 border-b border-border">
           <div className="flex items-center justify-between mb-3">
             <h2 className="font-semibold text-foreground">Documentos</h2>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onNewDocument}
-              className="h-8 w-8 p-0 hover:bg-sidebar-hover"
-            >
-              <Plus className="h-4 w-4" />
-            </Button>
+            <div className="flex items-center gap-1">
+              <ThemeToggle />
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 w-8 p-0 hover:bg-sidebar-hover"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={onNewDocument}>
+                    <FileText className="h-4 w-4 mr-2" />
+                    Novo Documento
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={onNewFolder}>
+                    <Folder className="h-4 w-4 mr-2" />
+                    Nova Pasta
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </div>
           
           {/* Search */}
