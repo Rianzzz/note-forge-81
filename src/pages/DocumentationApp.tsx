@@ -182,6 +182,7 @@ Bom trabalho! 📝`,
     const sampleFolders: Folder[] = [
       { id: "1", name: "Projetos", isExpanded: true },
       { id: "2", name: "Tutoriais", isExpanded: false },
+      { id: "3", name: "Rascunhos", isExpanded: true },
     ];
 
     setDocuments(sampleDocuments);
@@ -210,6 +211,27 @@ Bom trabalho! 📝`,
     toast({
       title: "Novo documento criado",
       description: "Comece a digitar para adicionar conteúdo.",
+    });
+  };
+
+  const handleNewDocumentInFolder = (folderId: string) => {
+    const folder = folders.find(f => f.id === folderId);
+    const newDocument: Document = {
+      id: Date.now().toString(),
+      title: "",
+      content: "",
+      folderId,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    setDocuments(prev => [newDocument, ...prev]);
+    setFilteredDocuments(prev => [newDocument, ...prev]);
+    setCurrentDocument(newDocument);
+    
+    toast({
+      title: "Novo documento criado",
+      description: `Documento criado na pasta "${folder?.name}".`,
     });
   };
 
@@ -246,6 +268,35 @@ Bom trabalho! 📝`,
     setCurrentDocument(updatedDocument);
   };
 
+  const handleMoveDocument = (documentId: string, targetFolderId?: string) => {
+    const updatedDocuments = documents.map(doc => 
+      doc.id === documentId 
+        ? { ...doc, folderId: targetFolderId, updatedAt: new Date() }
+        : doc
+    );
+    
+    setDocuments(updatedDocuments);
+    setFilteredDocuments(updatedDocuments);
+    
+    const targetFolder = folders.find(f => f.id === targetFolderId);
+    const targetName = targetFolder ? `pasta "${targetFolder.name}"` : "raiz";
+    
+    toast({
+      title: "Documento movido",
+      description: `Documento movido para ${targetName}.`,
+    });
+  };
+
+  const handleToggleFolder = (folderId: string) => {
+    setFolders(prev => 
+      prev.map(folder => 
+        folder.id === folderId 
+          ? { ...folder, isExpanded: !folder.isExpanded }
+          : folder
+      )
+    );
+  };
+
   const handleSearchChange = (query: string) => {
     if (!query.trim()) {
       setFilteredDocuments(documents);
@@ -269,7 +320,10 @@ Bom trabalho! 📝`,
           currentDocumentId={currentDocument?.id}
           onDocumentSelect={handleDocumentSelect}
           onNewDocument={handleNewDocument}
+          onNewDocumentInFolder={handleNewDocumentInFolder}
           onSearchChange={handleSearchChange}
+          onMoveDocument={handleMoveDocument}
+          onToggleFolder={handleToggleFolder}
         />
       </div>
 
