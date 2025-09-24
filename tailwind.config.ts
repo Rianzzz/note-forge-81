@@ -57,6 +57,24 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        
+        /* Custom colors */
+        "sidebar-bg": "hsl(var(--sidebar-bg))",
+        "sidebar-hover": "hsl(var(--sidebar-hover))",
+        "editor-bg": "hsl(var(--editor-bg))",
+        "content-bg": "hsl(var(--content-bg))",
+      },
+      backgroundImage: {
+        "gradient-primary": "var(--gradient-primary)",
+        "gradient-subtle": "var(--gradient-subtle)",
+      },
+      boxShadow: {
+        "custom-sm": "var(--shadow-sm)",
+        "custom-md": "var(--shadow-md)",
+        "custom-lg": "var(--shadow-lg)",
+      },
+      transitionTimingFunction: {
+        "smooth": "var(--transition-smooth)",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -87,5 +105,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
 } satisfies Config;
